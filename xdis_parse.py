@@ -7,6 +7,7 @@ class xdisBytecode:
     filename = None
     code = None
     constants = None
+    name = None
 
     @classmethod
     def from_file(self, path:str):
@@ -18,4 +19,5 @@ class xdisBytecode:
     def __init__(self, co:code, filename:str):
         self.filename = filename
         self.code = list(dis.get_instructions(co))
+        self.name = co.co_name
         self.constants = co.co_consts

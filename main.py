@@ -1,21 +1,22 @@
 import PySimpleGUIQt as sg
 
-sg.theme('Default')
+menu_layout = [
+    ['File', ['Open', '---', 'Exit']]
+]
 
-def main_window():
-    menu_layout = [
-        ['File', ['Open', '---', 'Exit']]
+treeData = sg.TreeData()
+tree = sg.Tree(data=treeData, show_expanded=True, key='TREE', headings=[], num_rows=20)
+editor = sg.Multiline()
+
+window_layout = [
+    [sg.Menu(menu_layout)],
+    [
+        tree,
+        editor
     ]
+]
 
-    window_layout = [
-        [sg.Menu(menu_layout)],
-        [sg.Listbox(values=[]), sg.Multiline()]
-    ]
-
-    window = sg.Window('pycDisGUI', window_layout, resizable=True)
-    return window
-
-window = main_window()
+window = sg.Window('pycDisGUI', window_layout, resizable=False)
 
 while True:
     event, values = window.read()
