@@ -1,16 +1,21 @@
 import os
 import subprocess
+import xdis.load
+import xdis.std as dis
 
 class xdisBytecode:
-    bytecode = ""
-    filename = ""
+    filename = None
+    code = None
+    constants = None
 
-    def __init__(self, path):
+    @classmethod
+    def from_file(self, path:str):
         if not os.path.exists(path):
             raise FileNotFoundError
-        self.bytecode = subprocess.check_output(['pydisasm', path]).decode('UTF-8')
+        (version, timestamp, magic_int, co, is_pypy, source_size, sip_hash) = xdis.load.load_module(path)
+        return xdisBytecode(co, co.co_filename)
 
-        for line in self.bytecode.split("\n"):
-            if line.startswith('# Filename:'):
-                self.filename = line[11:].strip()
-                break
+    def __init__(self, co:code, filename:str):
+        self.filename = filename
+        self.code = list(dis.get_instructions(co))
+        self.constants = co.co_consts
