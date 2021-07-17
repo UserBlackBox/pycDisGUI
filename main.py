@@ -1,24 +1,18 @@
-import PySimpleGUIQt as sg
+from xdis_parse import xdisBytecode
+import gi
 
-menu_layout = [
-    ['File', ['Open', '---', 'Exit']]
-]
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
 
-treeData = sg.TreeData()
-tree = sg.Tree(data=treeData, show_expanded=True, key='TREE', headings=[], num_rows=20)
-editor = sg.Multiline()
+builder = Gtk.Builder()
+builder.add_from_file("gui.glade")
 
-window_layout = [
-    [sg.Menu(menu_layout)],
-    [
-        tree,
-        editor
-    ]
-]
+class Handler:
+    def onDestroy(self, *args):
+        Gtk.main_quit()
 
-window = sg.Window('pycDisGUI', window_layout, resizable=False)
+builder.connect_signals(Handler())
 
-while True:
-    event, values = window.read()
-    if event == sg.WIN_CLOSED:
-        break
+window = builder.get_object("window1")
+window.show_all()
+Gtk.main()
