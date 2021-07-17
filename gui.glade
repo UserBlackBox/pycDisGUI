@@ -2,11 +2,19 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkListStore" id="code_tree_store">
+    <columns>
+      <!-- column-name Name -->
+      <column type="gchar"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="window1">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">pycDisGUI</property>
-    <property name="icon-name">applications-development</property>
-    <signal name="destroy" handler="onDestroy" swapped="no"/>
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="icon-name">application-x-python-bytecode</property>
+    <signal name="destroy" handler="window1_onDestroy" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -27,7 +35,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu-file-new">
+                      <object class="GtkImageMenuItem" id="menu_file_new">
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -36,12 +44,13 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu-file-open">
+                      <object class="GtkImageMenuItem" id="menu_file_open">
                         <property name="label">gtk-open</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
                         <property name="use-stock">True</property>
+                        <signal name="activate" handler="menu_file_open_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -51,12 +60,13 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu-file-quit">
+                      <object class="GtkImageMenuItem" id="menu_file_quit">
                         <property name="label">gtk-quit</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
                         <property name="use-stock">True</property>
+                        <signal name="activate" handler="menu_file_quit_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -76,9 +86,13 @@
             <property name="can-focus">True</property>
             <property name="wide-handle">True</property>
             <child>
-              <object class="GtkTreeView" id="code-tree">
+              <object class="GtkTreeView" id="code_tree">
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="model">code_tree_store</property>
+                <property name="enable-tree-lines">True</property>
+                <property name="activate-on-single-click">True</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
@@ -89,7 +103,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="code-browser">
+              <object class="GtkTextView" id="code_browser">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="editable">False</property>
