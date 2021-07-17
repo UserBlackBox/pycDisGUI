@@ -21,3 +21,18 @@ class xdisBytecode:
         self.code = list(dis.get_instructions(co))
         self.name = co.co_name
         self.constants = co.co_consts
+
+    def get_bytecode(self):
+        code = ""
+        for instruction in self.code:
+            if instruction.starts_line:
+                if len(code)!=0: code+="\n"
+                code += str(instruction.starts_line) + ':'
+            code += "\t\t"
+            code += str(instruction.offset)
+            code += "\t\t"
+            code += instruction.opname
+            code += "\t\t\t"
+            code += instruction.argrepr
+            code += "\n"
+        return code
