@@ -36,11 +36,11 @@ class XdisBytecode:
             if instruction.starts_line:
                 if len(code)!=0: code+="\n"
                 code += str(instruction.starts_line) + ':'
-            code += "\t\t"
+            code += "\t"
             code += str(instruction.offset)
-            code += "\t\t"
+            code += "\t"
             code += instruction.opname
-            code += "\t\t\t"
+            code += "\t\t"
             code += instruction.argrepr
             code += "\n"
         return code
