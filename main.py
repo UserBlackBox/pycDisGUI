@@ -10,8 +10,12 @@ def main():
     builder.add_from_file("gui.glade")
     window = builder.get_object("window1")
 
+    global bytecodeFile
+    global codeTreeStore
+    global codeBrowserBuffer
     bytecodeFile = None
     codeTreeStore = builder.get_object("code_tree_store")
+    codeBrowserBuffer = builder.get_object("bytecode_buffer")
 
     class Handler:
         def window1_onDestroy(self, *args):
@@ -35,7 +39,12 @@ def main():
 
             response = dialog.run()
             if response == Gtk.ResponseType.OK:
+                global bytecodeFile
+                global codeTreeStore
+                global codeBrowserBuffer
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
+                treefile = codeTreeStore.append(None, [bytecodeFile.name])
+                codeBrowserBuffer.set_text(bytecodeFile.get_bytecode())
             dialog.destroy()
 
     builder.connect_signals(Handler())
