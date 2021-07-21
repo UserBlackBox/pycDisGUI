@@ -2,10 +2,11 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkListStore" id="code_tree_store">
+  <object class="GtkTextBuffer" id="bytecode_buffer"/>
+  <object class="GtkTreeStore" id="code_tree_store">
     <columns>
       <!-- column-name Name -->
-      <column type="gchar"/>
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkWindow" id="window1">
@@ -86,15 +87,37 @@
             <property name="can-focus">True</property>
             <property name="wide-handle">True</property>
             <child>
-              <object class="GtkTreeView" id="code_tree">
+              <object class="GtkScrolledWindow">
                 <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="model">code_tree_store</property>
-                <property name="enable-tree-lines">True</property>
-                <property name="activate-on-single-click">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="code_tree">
+                    <property name="width-request">200</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="model">code_tree_store</property>
+                    <property name="headers-clickable">False</property>
+                    <property name="enable-search">False</property>
+                    <property name="search-column">0</property>
+                    <property name="enable-tree-lines">True</property>
+                    <property name="activate-on-single-click">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <property name="title" translatable="yes">Name</property>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -103,12 +126,20 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="code_browser">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="editable">False</property>
-                <property name="cursor-visible">False</property>
-                <property name="monospace">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTextView" id="code_browser">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="cursor-visible">False</property>
+                    <property name="buffer">bytecode_buffer</property>
+                    <property name="monospace">True</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="resize">True</property>
