@@ -59,6 +59,18 @@ def main():
                 codeBrowserBuffer.set_text(bytecodeFile.get_bytecode())
             dialog.destroy()
 
+        def code_tree_cursor_changed(self, data):
+            store, iter = data.get_selection().get_selected()
+            path = store.get_string_from_iter(iter)
+            path = list(map(int, path.split(':')))[1:]
+            global bytecodeFile
+            global codeBrowserBuffer
+            bytecode = bytecodeFile
+            for i in path:
+                bytecode = bytecode.sub[i]
+            codeBrowserBuffer.set_text(bytecode.get_bytecode())
+
+
     builder.connect_signals(Handler())
     window.show_all()
     Gtk.main()
