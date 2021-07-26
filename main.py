@@ -61,6 +61,8 @@ def main():
 
         def code_tree_cursor_changed(self, data):
             store, iter = data.get_selection().get_selected()
+            if iter == None:
+                return
             path = store.get_string_from_iter(iter)
             path = list(map(int, path.split(':')))[1:]
             global bytecodeFile
