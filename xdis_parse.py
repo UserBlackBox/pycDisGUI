@@ -25,6 +25,7 @@ class XdisBytecode:
         if file_as_name:
             self.name = filename
         self.constants = co.co_consts
+        self.sub = []
 
         for const in co.co_consts:
             if iscode(const):
