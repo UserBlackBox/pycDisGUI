@@ -85,16 +85,15 @@
           <object class="GtkPaned">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="position">200</property>
             <property name="wide-handle">True</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="width-request">200</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="code_tree">
-                    <property name="width-request">200</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="model">code_tree_store</property>
