@@ -13,7 +13,9 @@ def main():
     global bytecodeFile
     global codeTreeStore
     global codeBrowserBuffer
+    global codeTree
     bytecodeFile = None
+    codeTree = builder.get_object("code_tree")
     codeTreeStore = builder.get_object("code_tree_store")
     codeBrowserBuffer = builder.get_object("bytecode_buffer")
 
@@ -42,6 +44,7 @@ def main():
                 global bytecodeFile
                 global codeTreeStore
                 global codeBrowserBuffer
+                global codeTree
                 codeTreeStore.clear()
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
                 tree_stack = []
@@ -55,7 +58,7 @@ def main():
                         stack = stack[:-1]
 
                 recurse(bytecodeFile, tree_stack)
-
+                codeTree.expand_all()
                 codeBrowserBuffer.set_text(bytecodeFile.get_bytecode())
             dialog.destroy()
 
