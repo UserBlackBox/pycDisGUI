@@ -42,6 +42,7 @@ def main():
                 global bytecodeFile
                 global codeTreeStore
                 global codeBrowserBuffer
+                codeTreeStore.clear()
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
                 tree_stack = []
                 treefile = codeTreeStore.append(None, [bytecodeFile.name])
