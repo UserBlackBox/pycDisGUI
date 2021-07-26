@@ -43,7 +43,18 @@ def main():
                 global codeTreeStore
                 global codeBrowserBuffer
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
+                tree_stack = []
                 treefile = codeTreeStore.append(None, [bytecodeFile.name])
+                tree_stack.append(treefile)
+
+                def recurse(bytecode:XdisBytecode, stack:list):
+                    for i in bytecode.sub:
+                        stack.append(codeTreeStore.append(stack[-1], [i.name]))
+                        recurse(i, stack)
+                        stack = stack[:-1]
+
+                recurse(bytecodeFile, tree_stack)
+
                 codeBrowserBuffer.set_text(bytecodeFile.get_bytecode())
             dialog.destroy()
 
