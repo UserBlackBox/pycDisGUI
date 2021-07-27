@@ -16,7 +16,8 @@ class XdisBytecode:
         if not os.path.exists(path):
             raise FileNotFoundError
         (version, timestamp, magic_int, co, is_pypy, source_size, sip_hash) = xdis.load.load_module(path)
-        return XdisBytecode(co, co.co_filename.split("/")[-1], True)
+        filename = co.co_filename.split('/')[-1].split('\\')[-1]
+        return XdisBytecode(co, filename, True)
 
     def __init__(self, co:code, filename:str, file_as_name:bool):
         self.filename = filename
