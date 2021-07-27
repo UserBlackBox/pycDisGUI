@@ -128,6 +128,7 @@
                     <property name="editable">False</property>
                     <property name="cursor-visible">False</property>
                     <property name="buffer">bytecode_buffer</property>
+                    <property name="accepts-tab">False</property>
                     <property name="monospace">True</property>
                   </object>
                 </child>
