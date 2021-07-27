@@ -15,10 +15,14 @@ def main():
     global codeTreeStore
     global codeBrowserBuffer
     global codeTree
+    global menu_linenum
+    global menu_jumps
     bytecodeFile = None
     codeTree = builder.get_object("code_tree")
     codeTreeStore = builder.get_object("code_tree_store")
     codeBrowserBuffer = builder.get_object("bytecode_buffer")
+    menu_linenum = builder.get_object("menu_view_linenum")
+    menu_jumps = builder.get_object("menu_view_targets")
 
     class Handler:
         def window1_onDestroy(self, *args):
@@ -46,6 +50,8 @@ def main():
                 global codeTreeStore
                 global codeBrowserBuffer
                 global codeTree
+                global menu_linenum
+                global menu_jumps
                 codeTreeStore.clear()
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
                 tree_stack = []
@@ -60,7 +66,7 @@ def main():
 
                 recurse(bytecodeFile, tree_stack)
                 codeTree.expand_all()
-                codeBrowserBuffer.set_text(bytecodeFile.get_bytecode())
+                codeBrowserBuffer.set_text(bytecodeFile.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
             dialog.destroy()
 
         def code_tree_cursor_changed(self, data):
@@ -74,10 +80,25 @@ def main():
             bytecode = bytecodeFile
             for i in path:
                 bytecode = bytecode.sub[i]
-            codeBrowserBuffer.set_text(bytecode.get_bytecode())
+            codeBrowserBuffer.set_text(bytecode.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
 
         def menu_help_dis_activate(self, data):
             webbrowser.open("https://docs.python.org/3/library/dis.html")
+
+        def menu_view_toggled(self, data):
+            store, iter = codeTree.get_selection().get_selected()
+            global bytecodeFile
+            global codeBrowserBuffer
+            if iter == None:
+                if bytecodeFile:
+                    codeBrowserBuffer.set_text(bytecodeFile.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
+                return
+            path = store.get_string_from_iter(iter)
+            path = list(map(int, path.split(':')))[1:]
+            bytecode = bytecodeFile
+            for i in path:
+                bytecode = bytecode.sub[i]
+            codeBrowserBuffer.set_text(bytecode.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
 
 
     builder.connect_signals(Handler())
