@@ -32,15 +32,17 @@ class XdisBytecode:
             if iscode(const):
                 self.sub.append(XdisBytecode(const, filename, False))
 
-    def get_bytecode(self):
+    def get_bytecode(self, linenum=True, jumps=True):
         code = ""
         for instruction in self.code:
-            if instruction.starts_line:
-                if len(code)!=0: code+="\n"
-                code += str(instruction.starts_line) + ':'
-            code += "\t"
-            if instruction.is_jump_target: code += ">>> "
-            else: code += "    "
+            if linenum:
+                if instruction.starts_line:
+                    if len(code)!=0: code+="\n"
+                    code += str(instruction.starts_line) + ':'
+                code += "\t"
+            if jumps:
+                if instruction.is_jump_target: code += ">>> "
+                else: code += "    "
             code += str(instruction.offset)
             code += "\t"
             code += instruction.opname
