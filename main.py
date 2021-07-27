@@ -66,6 +66,7 @@ def main():
 
                 recurse(bytecodeFile, tree_stack)
                 codeTree.expand_all()
+                codeTree.set_cursor(Gtk.TreePath.new_first())
                 codeBrowserBuffer.set_text(bytecodeFile.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
             dialog.destroy()
 
