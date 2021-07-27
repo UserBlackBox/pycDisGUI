@@ -54,6 +54,7 @@ def main():
                 global menu_jumps
                 codeTreeStore.clear()
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
+                window.set_title("pycDisGUI - {}".format(dialog.get_filename().split('/')[-1]))
                 tree_stack = []
                 treefile = codeTreeStore.append(None, [bytecodeFile.name])
                 tree_stack.append(treefile)
