@@ -55,7 +55,7 @@ def main():
                     for i in bytecode.sub:
                         stack.append(codeTreeStore.append(stack[-1], [i.name]))
                         recurse(i, stack)
-                        stack = stack[:-1]
+                        stack.pop()
 
                 recurse(bytecodeFile, tree_stack)
                 codeTree.expand_all()
