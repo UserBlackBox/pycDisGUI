@@ -1,5 +1,6 @@
 from xdis_parse import XdisBytecode
 import gi
+import webbrowser
 
 
 def main():
@@ -74,6 +75,9 @@ def main():
             for i in path:
                 bytecode = bytecode.sub[i]
             codeBrowserBuffer.set_text(bytecode.get_bytecode())
+
+        def menu_help_dis_activate(self, data):
+            webbrowser.open("https://docs.python.org/3/library/dis.html")
 
 
     builder.connect_signals(Handler())
