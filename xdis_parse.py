@@ -38,10 +38,16 @@ class XdisBytecode:
                 if len(code)!=0: code+="\n"
                 code += str(instruction.starts_line) + ':'
             code += "\t"
+            if instruction.is_jump_target: code += ">>> "
+            else: code += "    "
             code += str(instruction.offset)
             code += "\t"
             code += instruction.opname
-            code += "\t\t"
-            code += instruction.argrepr
+            if len(instruction.opname)<8: code += "\t"
+            if len(instruction.opname)<16: code += "\t\t"
+            else: code += "\t"
+            if iscode(instruction.argval): code += "<code object {}>".format(instruction.argval.co_name)
+            elif len(instruction.argrepr) != 0: code += instruction.argrepr
+            elif instruction.argval != None: code += str(instruction.argval)
             code += "\n"
         return code
