@@ -86,6 +86,9 @@ def main():
                 text = bytecodeFile.get_details()
                 details_buffer.insert_markup(start, text, len(text))
 
+                global constants_buffer
+                constants_buffer.set_text(bytecodeFile.get_consts())
+
             dialog.destroy()
 
         def code_tree_cursor_changed(self, data):
@@ -113,6 +116,9 @@ def main():
             details_buffer.delete(start, end)
             text = bytecode.get_details()
             details_buffer.insert_markup(start, text, len(text))
+
+            global constants_buffer
+            constants_buffer.set_text(bytecode.get_consts())
 
         def menu_help_dis_activate(self, data):
             webbrowser.open("https://docs.python.org/3/library/dis.html")
