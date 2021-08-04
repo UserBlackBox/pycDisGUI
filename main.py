@@ -17,12 +17,16 @@ def main():
     global codeTree
     global menu_linenum
     global menu_jumps
+    global details_buffer
+    global constants_buffer
     bytecodeFile = None
     codeTree = builder.get_object("code_tree")
     codeTreeStore = builder.get_object("code_tree_store")
     codeBrowserBuffer = builder.get_object("bytecode_buffer")
     menu_linenum = builder.get_object("menu_view_linenum")
     menu_jumps = builder.get_object("menu_view_targets")
+    details_buffer = builder.get_object("details_buffer")
+    constants_buffer = builder.get_object("constants_buffer")
 
     class Handler:
         def window1_onDestroy(self, *args):
@@ -56,7 +60,7 @@ def main():
                 bytecodeFile = XdisBytecode.from_file(dialog.get_filename())
                 window.set_title("pycDisGUI - {}".format(dialog.get_filename().split('/')[-1]))
                 tree_stack = []
-                treefile = codeTreeStore.append(None, [bytecodeFile.name])
+                treefile = codeTreeStore.append(None, [bytecodeFile.filename])
                 tree_stack.append(treefile)
 
                 def recurse(bytecode:XdisBytecode, stack:list):
@@ -70,10 +74,17 @@ def main():
                 codeTree.set_cursor(Gtk.TreePath.new_first())
                 start = codeBrowserBuffer.get_start_iter()
                 end = codeBrowserBuffer.get_end_iter()
-                codeBrowserBuffer.delete(start,end)
+                codeBrowserBuffer.delete(start, end)
                 text = bytecodeFile.get_bytecode(linenum=menu_linenum.get_active(),
                                                  jumps=menu_jumps.get_active())
                 codeBrowserBuffer.insert_markup(start, text, len(text))
+
+                global details_buffer
+                start = details_buffer.get_start_iter()
+                end = details_buffer.get_end_iter()
+                details_buffer.delete(start, end)
+                text = bytecodeFile.get_details()
+                details_buffer.insert_markup(start, text, len(text))
 
             dialog.destroy()
 
@@ -93,7 +104,15 @@ def main():
             codeBrowserBuffer.delete(start,end)
             text = bytecode.get_bytecode(linenum=menu_linenum.get_active(),
                                              jumps=menu_jumps.get_active())
+            text = text.strip()
             codeBrowserBuffer.insert_markup(start, text, len(text))
+
+            global details_buffer
+            start = details_buffer.get_start_iter()
+            end = details_buffer.get_end_iter()
+            details_buffer.delete(start, end)
+            text = bytecode.get_details()
+            details_buffer.insert_markup(start, text, len(text))
 
         def menu_help_dis_activate(self, data):
             webbrowser.open("https://docs.python.org/3/library/dis.html")
