@@ -118,3 +118,11 @@ class XdisBytecode:
                 details += "\t{}: {}\n".format(self.co.co_argcount + i, self.co.co_varnames[self.co.co_argcount + i])
 
         return details
+
+    def get_consts(self) -> str:
+        consts = ""
+        for i, const in enumerate(self.co.co_consts):
+            if isinstance(const, str):
+                const = "'{}'".format(const).replace("\n", "\\n").replace("\t", "\\t")
+            consts += "{}: {}\n".format(i, const)
+        return consts
