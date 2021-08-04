@@ -97,12 +97,14 @@ class XdisBytecode:
 
         details += "<b>First Line:</b> {}\n".format(self.co.co_firstlineno)
 
-        details += "\n<b>Names:</b>\n"
-        for i in range(len(self.co.co_names)):
-            details += "\t{}: {}\n".format(i, self.co.co_names[i])
+        if len(self.co.co_names) > 0:
+            details += "\n<b>Names:</b>\n"
+            for i in range(len(self.co.co_names)):
+                details += "\t{}: {}\n".format(i, self.co.co_names[i])
 
-        details += "\n<b>Varnames:</b>\n"
-        for i in range(len(self.co.co_varnames)):
-            details += "\t{}: {}\n".format(i, self.co.co_varnames[i])
+        if len(self.co.co_varnames) > 0:
+            details += "\n<b>Varnames:</b>\n"
+            for i in range(len(self.co.co_varnames)):
+                details += "\t{}: {}\n".format(i, self.co.co_varnames[i])
 
         return details
