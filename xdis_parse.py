@@ -1,7 +1,9 @@
 import os
+import xdis
 import xdis.load
 import xdis.std as dis
 from xdis import iscode
+import html
 
 
 class XdisBytecode:
@@ -10,6 +12,7 @@ class XdisBytecode:
     constants = ()
     name = ""
     sub = []
+    co = None
 
     @classmethod
     def from_file(self, path:str):
@@ -27,6 +30,7 @@ class XdisBytecode:
             self.name = filename
         self.constants = co.co_consts
         self.sub = []
+        self.co = co
 
         for const in co.co_consts:
             if iscode(const):
@@ -38,19 +42,20 @@ class XdisBytecode:
             if linenum:
                 if instruction.starts_line:
                     if len(code)!=0: code+="\n"
-                    code += str(instruction.starts_line) + ':'
+                    code += html.escape(str(instruction.starts_line)) + ':'
                 code += "\t"
             if jumps:
-                if instruction.is_jump_target: code += ">>> "
+                if instruction.is_jump_target: code += html.escape(">>> ")
                 else: code += "    "
-            code += str(instruction.offset)
-            code += "\t"
-            code += instruction.opname
+            code += html.escape(str(instruction.offset))
+            code += "\t<b>"
+            code += html.escape(instruction.opname)
+            code += "</b>"
             if len(instruction.opname)<8: code += "\t"
             if len(instruction.opname)<16: code += "\t\t"
             else: code += "\t"
-            if iscode(instruction.argval): code += "<code object {}>".format(instruction.argval.co_name)
-            elif len(instruction.argrepr) != 0: code += instruction.argrepr
-            elif instruction.argval != None: code += str(instruction.argval)
+            if iscode(instruction.argval): code += html.escape("<code object {}>".format(instruction.argval.co_name))
+            elif len(instruction.argrepr) != 0: code += html.escape(instruction.argrepr)
+            elif instruction.argval != None: code += html.escape(str(instruction.argval))
             code += "\n"
         return code
