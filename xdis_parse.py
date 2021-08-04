@@ -4,6 +4,7 @@ import xdis.load
 import xdis.std as dis
 from xdis import iscode
 import html
+from datetime import datetime
 
 
 class XdisBytecode:
@@ -13,6 +14,11 @@ class XdisBytecode:
     name = ""
     sub = []
     co = None
+    is_file = False
+    version = None
+    timestamp = None
+    is_pypy = None
+    source_size = None
 
     @classmethod
     def from_file(self, path:str):
@@ -20,23 +26,26 @@ class XdisBytecode:
             raise FileNotFoundError
         (version, timestamp, magic_int, co, is_pypy, source_size, sip_hash) = xdis.load.load_module(path)
         filename = co.co_filename.split('/')[-1].split('\\')[-1]
-        return XdisBytecode(co, filename, True)
+        return XdisBytecode(co, filename, True, version, timestamp, magic_int, source_size)
 
-    def __init__(self, co:code, filename:str, file_as_name:bool):
+    def __init__(self, co:code, filename:str, file_as_name:bool, version=None, timestamp=None, is_pypy=None, source_size=None):
         self.filename = filename
         self.code = list(dis.get_instructions(co))
         self.name = co.co_name
-        if file_as_name:
-            self.name = filename
         self.constants = co.co_consts
         self.sub = []
         self.co = co
+        self.is_file = file_as_name
+        self.version = version
+        self.timestamp = timestamp
+        self.is_pypy = is_pypy
+        self.source_size = source_size
 
         for const in co.co_consts:
             if iscode(const):
                 self.sub.append(XdisBytecode(const, filename, False))
 
-    def get_bytecode(self, linenum=True, jumps=True):
+    def get_bytecode(self, linenum=True, jumps=True) -> str:
         code = ""
         for instruction in self.code:
             if linenum:
@@ -59,3 +68,41 @@ class XdisBytecode:
             elif instruction.argval != None: code += html.escape(str(instruction.argval))
             code += "\n"
         return code
+
+    def get_details(self) -> str:
+        details = ""
+
+        if self.is_file:
+            details += "<b>Python Version:</b> " + str(self.version) + "\n"
+            details += "<b>Timestamp:</b> " + str(self.timestamp)
+            details += ' ({})\n'.format(str(datetime.fromtimestamp(self.timestamp)))
+            details += "<b>Source Code Size:</b> {} bytes\n".format(self.source_size)
+            details += "\n"
+
+        details += "<b>Filename:</b> {}\n".format(self.filename)
+        details += "<b>Method Name:</b> {}\n".format(html.escape(self.name))
+        details += "<b>Argument Count:</b> {}\n".format(self.co.co_argcount)
+        details += "<b>Position-Only Argument Count:</b> {}\n".format(self.co.co_posonlyargcount)
+        details += "<b>Keyword-Only Argument Count:</b> {}\n".format(self.co.co_kwonlyargcount)
+        details += "<b>Number of Locals:</b> {}\n".format(self.co.co_nlocals)
+        details += "<b>Stack Size:</b> {}\n".format(self.co.co_stacksize)
+
+        flags = []
+        flag_num = self.co.co_flags
+        for flag in sorted(xdis.COMPILER_FLAG_NAMES.keys())[::-1]:
+            if flag <= flag_num:
+                flags.append(xdis.COMPILER_FLAG_NAMES[flag])
+                flag_num -= flag
+        details += "<b>Flags:</b> {} ({})\n".format(hex(self.co.co_flags), " | ".join(flags))
+
+        details += "<b>First Line:</b> {}\n".format(self.co.co_firstlineno)
+
+        details += "\n<b>Names:</b>\n"
+        for i in range(len(self.co.co_names)):
+            details += "\t{}: {}\n".format(i, self.co.co_names[i])
+
+        details += "\n<b>Varnames:</b>\n"
+        for i in range(len(self.co.co_varnames)):
+            details += "\t{}: {}\n".format(i, self.co.co_varnames[i])
+
+        return details
