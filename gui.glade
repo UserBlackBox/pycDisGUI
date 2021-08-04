@@ -239,6 +239,7 @@
                     <child>
                       <object class="GtkTextView" id="details_ml">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="can-focus">True</property>
                         <property name="editable">False</property>
                         <property name="cursor-visible">False</property>
