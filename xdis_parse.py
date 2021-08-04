@@ -107,4 +107,14 @@ class XdisBytecode:
             for i in range(len(self.co.co_varnames)):
                 details += "\t{}: {}\n".format(i, self.co.co_varnames[i])
 
+        if self.co.co_argcount > 0:
+            details += "\n<b>Positional Arguments:</b>\n"
+            for i in range(self.co.co_argcount):
+                details += "\t{}: {}\n".format(i, self.co.co_varnames[i])
+
+        if len(self.co.co_varnames) > self.co.co_argcount:
+            details += "\n<b>Local Variables:</b>\n"
+            for i in range(len(self.co.co_varnames) - self.co.co_argcount):
+                details += "\t{}: {}\n".format(self.co.co_argcount + i, self.co.co_varnames[self.co.co_argcount + i])
+
         return details
