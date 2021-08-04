@@ -68,7 +68,13 @@ def main():
                 recurse(bytecodeFile, tree_stack)
                 codeTree.expand_all()
                 codeTree.set_cursor(Gtk.TreePath.new_first())
-                codeBrowserBuffer.set_text(bytecodeFile.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
+                start = codeBrowserBuffer.get_start_iter()
+                end = codeBrowserBuffer.get_end_iter()
+                codeBrowserBuffer.delete(start,end)
+                text = bytecodeFile.get_bytecode(linenum=menu_linenum.get_active(),
+                                                 jumps=menu_jumps.get_active())
+                codeBrowserBuffer.insert_markup(start, text, len(text))
+
             dialog.destroy()
 
         def code_tree_cursor_changed(self, data):
@@ -82,7 +88,12 @@ def main():
             bytecode = bytecodeFile
             for i in path:
                 bytecode = bytecode.sub[i]
-            codeBrowserBuffer.set_text(bytecode.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
+            start = codeBrowserBuffer.get_start_iter()
+            end = codeBrowserBuffer.get_end_iter()
+            codeBrowserBuffer.delete(start,end)
+            text = bytecode.get_bytecode(linenum=menu_linenum.get_active(),
+                                             jumps=menu_jumps.get_active())
+            codeBrowserBuffer.insert_markup(start, text, len(text))
 
         def menu_help_dis_activate(self, data):
             webbrowser.open("https://docs.python.org/3/library/dis.html")
