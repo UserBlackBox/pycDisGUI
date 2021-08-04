@@ -2,23 +2,39 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkTextBuffer" id="bytecode_buffer"/>
+  <object class="GtkImage" id="about_image">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="stock">gtk-about</property>
+  </object>
   <object class="GtkTreeStore" id="code_tree_store">
     <columns>
       <!-- column-name Name -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-about</property>
+  <object class="GtkTextTagTable" id="texttagtable1">
+    <child type="tag">
+      <object class="GtkTextTag" id="texttag_bold">
+        <property name="name">texttag_bold</property>
+        <property name="font">Normal</property>
+        <property name="weight">700</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="bytecode_buffer">
+    <property name="tag-table">texttagtable1</property>
+  </object>
+  <object class="GtkTextBuffer" id="constants_buffer">
+    <property name="tag-table">texttagtable1</property>
+  </object>
+  <object class="GtkTextBuffer" id="details_buffer">
+    <property name="tag-table">texttagtable1</property>
   </object>
   <object class="GtkWindow" id="window1">
     <property name="can-focus">False</property>
-    <property name="title" translatable="yes">pycDisGUI</property>
-    <property name="default-width">800</property>
-    <property name="default-height">600</property>
+    <property name="default-width">1000</property>
+    <property name="default-height">800</property>
     <property name="icon-name">application-x-python-bytecode</property>
     <signal name="destroy" handler="window1_onDestroy" swapped="no"/>
     <child>
@@ -119,7 +135,7 @@
                         <property name="label" translatable="yes">Python dis Documentation</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="image">image1</property>
+                        <property name="image">about_image</property>
                         <property name="use-stock">False</property>
                         <signal name="activate" handler="menu_help_dis_activate" swapped="no"/>
                       </object>
@@ -140,6 +156,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="position">200</property>
+            <property name="position-set">True</property>
             <property name="wide-handle">True</property>
             <child>
               <object class="GtkScrolledWindow">
@@ -180,20 +197,102 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkNotebook">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="shadow-type">in</property>
+                <property name="show-border">False</property>
+                <property name="scrollable">True</property>
+                <property name="enable-popup">True</property>
                 <child>
-                  <object class="GtkTextView" id="code_browser">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="editable">False</property>
-                    <property name="cursor-visible">False</property>
-                    <property name="buffer">bytecode_buffer</property>
-                    <property name="accepts-tab">False</property>
-                    <property name="monospace">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="code_browser">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="editable">False</property>
+                        <property name="cursor-visible">False</property>
+                        <property name="buffer">bytecode_buffer</property>
+                        <property name="accepts-tab">False</property>
+                        <property name="monospace">True</property>
+                      </object>
+                    </child>
                   </object>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Bytecode</property>
+                  </object>
+                  <packing>
+                    <property name="tab-fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="details_ml">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="editable">False</property>
+                        <property name="cursor-visible">False</property>
+                        <property name="buffer">details_buffer</property>
+                        <property name="accepts-tab">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Details</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="tab-fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="shadow-type">in</property>
+                    <child>
+                      <object class="GtkTextView" id="constants_ml">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="editable">False</property>
+                        <property name="cursor-visible">False</property>
+                        <property name="buffer">constants_buffer</property>
+                        <property name="accepts-tab">False</property>
+                        <property name="monospace">True</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Constants</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                    <property name="tab-fill">False</property>
+                  </packing>
                 </child>
               </object>
               <packing>
