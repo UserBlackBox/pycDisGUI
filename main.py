@@ -110,7 +110,6 @@ def main():
             codeBrowserBuffer.delete(start,end)
             text = bytecode.get_bytecode(linenum=menu_linenum.get_active(),
                                              jumps=menu_jumps.get_active())
-            text = text.strip()
             codeBrowserBuffer.insert_markup(start, text, len(text))
 
             global details_buffer
@@ -139,7 +138,12 @@ def main():
             bytecode = bytecodeFile
             for i in path:
                 bytecode = bytecode.sub[i]
-            codeBrowserBuffer.set_text(bytecode.get_bytecode(linenum=menu_linenum.get_active(), jumps=menu_jumps.get_active()))
+            start = codeBrowserBuffer.get_start_iter()
+            end = codeBrowserBuffer.get_end_iter()
+            codeBrowserBuffer.delete(start,end)
+            text = bytecode.get_bytecode(linenum=menu_linenum.get_active(),
+                                         jumps=menu_jumps.get_active())
+            codeBrowserBuffer.insert_markup(start, text, len(text))
 
 
     builder.connect_signals(Handler())
