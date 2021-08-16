@@ -11,6 +11,10 @@ def main():
 
     builder = Gtk.Builder()
     GObject.type_register(GtkSource.View)
+    GObject.type_register(GtkSource.Buffer)
+    GObject.type_register(GtkSource.LanguageManager)
+    GObject.type_register(GtkSource.Language)
+    GObject.type_register(GtkSource.StyleSchemeChooserButton)
     builder.add_from_file(join(abspath(dirname(__file__)), "main.glade"))
     window = builder.get_object("window1")
 
@@ -30,6 +34,11 @@ def main():
     menu_jumps = builder.get_object("menu_view_targets")
     details_buffer = builder.get_object("details_buffer")
     constants_buffer = builder.get_object("constants_buffer")
+
+    langmanager = GtkSource.LanguageManager()
+    lang = langmanager.get_language('python3')
+    codeBrowserBuffer.set_language(lang)
+    constants_buffer.set_language(lang)
 
     class Handler:
         def window1_onDestroy(self, *args):
