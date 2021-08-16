@@ -39,14 +39,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <property name="can-focus">False</property>
     <property name="stock">gtk-about</property>
   </object>
-  <object class="GtkTextBuffer" id="bytecode_buffer"/>
+  <object class="GtkSourceBuffer" id="bytecode_buffer"/>
   <object class="GtkTreeStore" id="code_tree_store">
     <columns>
       <!-- column-name Name -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTextBuffer" id="constants_buffer"/>
+  <object class="GtkSourceBuffer" id="constants_buffer"/>
   <object class="GtkTextBuffer" id="details_buffer"/>
   <object class="GtkWindow" id="window1">
     <property name="can-focus">False</property>
