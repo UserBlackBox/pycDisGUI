@@ -5,10 +5,13 @@ import webbrowser
 
 def main():
     gi.require_version("Gtk", "3.0")
-    from gi.repository import Gtk
+    gi.require_version("GtkSource", '4')
+    from gi.repository import Gtk, GtkSource, GObject
+    from os.path import abspath, dirname, join
 
     builder = Gtk.Builder()
-    builder.add_from_file("gui.glade")
+    GObject.type_register(GtkSource.View)
+    builder.add_from_file(join(abspath(dirname(__file__)), "main.glade"))
     window = builder.get_object("window1")
 
     global bytecodeFile
