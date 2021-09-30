@@ -54,7 +54,7 @@ class XdisBytecode:
                     code += html.escape(str(instruction.starts_line)) + ':'
                 code += "\t"
             if jumps:
-                if instruction.is_jump_target: code += html.escape(">>> ")
+                if instruction.is_jump_target: code += html.escape(">> ")
                 else: code += "    "
             code += html.escape(str(instruction.offset))
             code += "\t<b>"
